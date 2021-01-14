@@ -26,12 +26,10 @@
         <p class="lead font-weight-bold">Description</p>
        
         <p>{{ item.description }}</p>
+        {% if not item_owner %}
         {% if user.is_authenticated %}
         <form name="{{ item.id }}" action="{% url 'listing' item.id %}" method="post" class="d-flex justify-content-left">
             {% csrf_token %}
-            
-            <!-- ADD TO WATCHLIST -->
-          
             {% if message %}
             <div id="unwatchButton">
               <button class="btn btn-primary btn-md my-0 p" name="unwatch" type="submit">Remove from watch list
@@ -49,13 +47,14 @@
       
         <div id="bidForm">
           <form action="{% url 'listing' item.id %}" method="post">
+            {% csrf_token %}
             {{ newbidform.amount }}
-            <button class="btn btn-primary btn-md my-0 p" type="submit">bid
+            <button class="btn btn-primary btn-md my-0 p" name="bid" type="submit">bid
               <i class="fas fa-shopping-cart ml-1"></i>
             </button>
           </form>
         </div>
         {% endif %}
       </div>
-      
+      {% endif %}
 {% endblock %}  

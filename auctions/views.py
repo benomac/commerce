@@ -3,7 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from .models import User, AuctionListing, WatchList
+from .models import User, AuctionListing, WatchList, Bid
 from .forms import NewListingForm, NewBid
 
 def index(request):
@@ -76,6 +76,7 @@ def new_listing(request):
             image = form.cleaned_data["image"]
             category = form.cleaned_data["category"]
             user = request.user
+            print("USER", user)
             # Create a new insert into the table
             new_listing_insert = AuctionListing.objects.create(item=title, description=description,
             starting_bid=starting_bid, image=image, category=category, user=user)
@@ -92,15 +93,35 @@ def listing(request, listing_id):
         
         item = AuctionListing.objects.get(pk=listing_id)
         
-        owner_of_item = AuctionListing.objects.filter(id=listing_id)[0].user
-        
         watch_message = False
+        bidder = User.objects.get(username=logged_in_user)
         
-        if logged_in_user:
-            if WatchList.objects.filter(watcher=logged_in_user).filter(watching=item):
-                watch_message = True
+        # if logged_in_user:
+        #     if WatchList.objects.filter(watcher=logged_in_user).filter(watching=item):
+        #         watch_message = True
+        if logged_in_user == item.user:
+            return render(request, "auctions/listing.html", {
+                "item_owner": True, "item": item
+            })
 
-        if request.method == "POST":
+        if request.method == "POST":    
+            form = NewBid(request.POST)
+            if form.is_valid():
+                amount = form.cleaned_data["amount"]
+                print(logged_in_user)
+                print(amount)
+                print(type(bidder))
+                print(item.id)
+                if amount >= item.starting_bid:
+                    
+                    print("ITEM", type(item))
+                    bid = Bid.objects.create(bid=amount, bidder=bidder, bid_item=item)
+                    print("wtf")
+                    bid.save()
+                    return render(request, "auctions/new_listing.html", {
+                        "form": NewListingForm()
+                    })
+                
             if 'watch' in request.POST:
                 watching = WatchList.objects.create(watching=item, watcher=logged_in_user)
                 watching.save()
