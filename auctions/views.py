@@ -121,17 +121,17 @@ def listing(request, listing_id):
                         bid.save()
                         # currant_bid.save
                         print("new_bid")
-                        return render(request, "auctions/listing.html", {
-                "newbidform": NewBid(), "item": item, "message": watch_message, "error": error
+            #             return render(request, "auctions/listing.html", {
+            #     "newbidform": NewBid(), "item": item, "message": watch_message, "error": error
                 
-            })
+            # })
                     else:
                         print("3b")
                         error = True
-                        return render(request, "auctions/listing.html", {
-                "newbidform": NewBid(), "item": item, "message": watch_message, "error": error
+            #             return render(request, "auctions/listing.html", {
+            #     "newbidform": NewBid(), "item": item, "message": watch_message, "error": error
                 
-            })
+            # })
                 
                 except:
                     # check if bid is higher than starting bid
@@ -139,17 +139,17 @@ def listing(request, listing_id):
                     if amount >= item.starting_bid:
                         bid = Bid.objects.create(bid=amount, bidder=bidder, bid_item=item)
                         bid.save()
-                        return render(request, "auctions/listing.html", {
-                "newbidform": NewBid(), "item": item, "message": watch_message
+            #             return render(request, "auctions/listing.html", {
+            #     "newbidform": NewBid(), "item": item, "message": watch_message
                 
-            })
+            # })
                     else:
                         error = True
                         print("passed5")
-                        return render(request, "auctions/listing.html", {
-                "newbidform": NewBid(), "item": item, "message": watch_message, "error": error
-                
-            })
+                return render(request, "auctions/listing.html", {
+        "newbidform": NewBid(), "item": item, "message": watch_message, "error": error
+        
+    })
 
                 
             if 'watch' in request.POST:
