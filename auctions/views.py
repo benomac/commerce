@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from .models import User, AuctionListing, WatchList, Bid
 from .forms import NewListingForm, NewBid
+from utils import test
 
 def index(request):
     
@@ -87,86 +88,71 @@ def new_listing(request):
     })
 
 def listing(request, listing_id):
-    ############# make it so you only have to render web page once, just change th e variables!!!!!!!!!!
     try:
         logged_in_user = request.user
         item = AuctionListing.objects.get(pk=listing_id)
-        print(item.item)
         error = False
-        watch_message = False
+        # watch_message = False
         bidder = User.objects.get(username=logged_in_user)
-        
-        
+        watched = WatchList.objects.filter(watching=item).filter(watcher=logged_in_user.id)
+        if not watched:
+            print("not")
         if logged_in_user == item.user:
             return render(request, "auctions/listing.html", {
                 "item_owner": True, "item": item
             })
 
         if request.method == "POST":    
-            print("passed1")
             # get bid amount from form and add it to 'form' variable
             form = NewBid(request.POST)
             
             if form.is_valid():
-                print("passed2")
                 # Extract amount from form variable
                 amount = form.cleaned_data["amount"]
                 try:
                     currant_bid = Bid.objects.get(bid_item=item)
-                    print("passed3", currant_bid.bid)
-                    print(currant_bid)
                     if amount > currant_bid.bid:
                         Bid.objects.get(bid_item=item).delete()
                         bid = Bid.objects.create(bid=amount, bidder=bidder, bid_item=item)
                         bid.save()
-                        # currant_bid.save
-                        print("new_bid")
-            #             return render(request, "auctions/listing.html", {
-            #     "newbidform": NewBid(), "item": item, "message": watch_message, "error": error
-                
-            # })
                     else:
-                        print("3b")
                         error = True
-            #             return render(request, "auctions/listing.html", {
-            #     "newbidform": NewBid(), "item": item, "message": watch_message, "error": error
-                
-            # })
+            
                 
                 except:
                     # check if bid is higher than starting bid
-                    print("passed4")
                     if amount >= item.starting_bid:
                         bid = Bid.objects.create(bid=amount, bidder=bidder, bid_item=item)
                         bid.save()
-            #             return render(request, "auctions/listing.html", {
-            #     "newbidform": NewBid(), "item": item, "message": watch_message
-                
-            # })
                     else:
                         error = True
-                        print("passed5")
-                return render(request, "auctions/listing.html", {
-        "newbidform": NewBid(), "item": item, "message": watch_message, "error": error
+                        
+                
+    #             return render(request, "auctions/listing.html", {
+    #     "newbidform": NewBid(), "item": item, "message": watch_message, "error": error
         
-    })
+    # })
 
-                
+
             if 'watch' in request.POST:
-                watching = WatchList.objects.create(watching=item, watcher=logged_in_user)
-                watching.save()
-                watch_message = True  
-                
-            elif 'unwatch' in request.POST:
-                WatchList.objects.filter(watching=item).delete()
+                if not watched:
+                    watching = WatchList.objects.create(watching=item, watcher=logged_in_user)
+                    watching.save()
+                    watch_message = True  
+                else:
+                    watch_message = True
+            if 'unwatch' in request.POST:
+                print("unwatch")
+                WatchList.objects.filter(watching=item).filter(watcher=logged_in_user).delete()
                 watch_message = False    
         
         return render(request, "auctions/listing.html", {
-                "newbidform": NewBid(), "item": item, "message": watch_message
+                "newbidform": NewBid(), "item": item, "watch_message": watch_message, "error": error, "watched": watched
                 
             })
     except:
+        print(test())
         return render(request, "auctions/listing.html", {
-                "newbidform": NewBid(), "item": item
+                "item": item, "newbidform": NewBid()
             })
 

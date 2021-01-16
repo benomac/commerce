@@ -32,7 +32,7 @@
         {% if user.is_authenticated %}
         <form name="{{ item.id }}" action="{% url 'listing' item.id %}" method="post" class="d-flex justify-content-left">
             {% csrf_token %}
-            {% if message %}
+            {% if watched %}
             <div id="unwatchButton">
               <button class="btn btn-primary btn-md my-0 p" name="unwatch" type="submit">Remove from watch list
                 <i class="fas fa-shopping-cart ml-1"></i>
