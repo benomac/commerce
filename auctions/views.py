@@ -88,71 +88,62 @@ def new_listing(request):
     })
 
 def listing(request, listing_id):
-    try:
-        logged_in_user = request.user
-        item = AuctionListing.objects.get(pk=listing_id)
-        error = False
-        # watch_message = False
-        bidder = User.objects.get(username=logged_in_user)
-        watched = WatchList.objects.filter(watching=item).filter(watcher=logged_in_user.id)
-        if not watched:
-            print("not")
-        if logged_in_user == item.user:
-            return render(request, "auctions/listing.html", {
-                "item_owner": True, "item": item
-            })
-
-        if request.method == "POST":    
-            # get bid amount from form and add it to 'form' variable
+    user = request.user
+    item = AuctionListing.objects.get(pk=listing_id)
+    owner = item.user
+    message = False
+    print("user", user)
+    # code for watch button, Working!
+    if user:
+        print("usertrue")
+    else:
+        print("userfalse")
+    if request.method == "POST":
+        if "Watch" in request.POST:
+            watched = WatchList.objects.create(watching=item, watcher=user)
+            watched.save()
+        if "unWatch" in request.POST:
+            WatchList.objects.filter(watching=item, watcher=user).delete()
+        
+        if "bidding" in request.POST:
+            print("bidding")
             form = NewBid(request.POST)
-            
+            print(form)
             if form.is_valid():
-                # Extract amount from form variable
+                print("valid")
                 amount = form.cleaned_data["amount"]
-                try:
-                    currant_bid = Bid.objects.get(bid_item=item)
-                    if amount > currant_bid.bid:
-                        Bid.objects.get(bid_item=item).delete()
-                        bid = Bid.objects.create(bid=amount, bidder=bidder, bid_item=item)
-                        bid.save()
-                    else:
-                        error = True
+                print(amount, item)
+                ### CHECK CHECK CHECK 
+            if not Bid.objects.filter(bid_item=item).exists() and amount >= item.starting_bid:
+                print("newbid")
+                new_bid = Bid.objects.create(bid=amount, bid_item=item, bidder=user)
+                new_bid.save()
             
+            elif Bid.objects.filter(bid_item=item).exists() and Bid.objects.filter(bid_item=item)[0].bid < amount:
+                print("change")
+                Bid.objects.filter(bid_item=item).delete()
+                update_bid = Bid.objects.create(bid=amount, bidder=user, bid_item=item)
+                update_bid.save()
+            else:
+                message = True
+            print("else")
                 
-                except:
-                    # check if bid is higher than starting bid
-                    if amount >= item.starting_bid:
-                        bid = Bid.objects.create(bid=amount, bidder=bidder, bid_item=item)
-                        bid.save()
-                    else:
-                        error = True
-                        
-                
-    #             return render(request, "auctions/listing.html", {
-    #     "newbidform": NewBid(), "item": item, "message": watch_message, "error": error
+        print("one")
+        # return render(request, "auctions/listing.html", {
+        #     "owner": owner, "form": NewBid(), "item": item, 
+        #     "user": user, "watched": WatchList.objects.filter(watching=item, watcher=user), 
+        #     "isuser": True, "message": message
+        # })
+    
         
-    # })
-
-
-            if 'watch' in request.POST:
-                if not watched:
-                    watching = WatchList.objects.create(watching=item, watcher=logged_in_user)
-                    watching.save()
-                    watch_message = True  
-                else:
-                    watch_message = True
-            if 'unwatch' in request.POST:
-                print("unwatch")
-                WatchList.objects.filter(watching=item).filter(watcher=logged_in_user).delete()
-                watch_message = False    
-        
+    if not User.objects.filter(username=user).exists():
         return render(request, "auctions/listing.html", {
-                "newbidform": NewBid(), "item": item, "watch_message": watch_message, "error": error, "watched": watched
-                
-            })
-    except:
-        print(test())
+                    "item": item, "isuser": False    
+                })
+    else:
+        print("else")
         return render(request, "auctions/listing.html", {
-                "item": item, "newbidform": NewBid()
-            })
-
+            "owner": owner, "form": NewBid(), "item": item, 
+            "user": user, "watched": WatchList.objects.filter(watching=item, watcher=user), 
+            "isuser": True, "message": message
+        })

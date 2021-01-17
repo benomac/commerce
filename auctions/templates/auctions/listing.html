@@ -1,63 +1,29 @@
 {% extends "auctions/layout.html" %}
-<title>{% block title %}Listing{% endblock %}</title>
+    <title>{% block title %}Listing{% endblock %}</title>
 {% block body %}
-    <h2>{{item}}</h2>
     
-    <div id="indexItemName">
-        <h4>{{ item.item }}</h4>
-    </div> 
-     <!-- Part of this html code was taken from an online templates website, the address is
-    https://mdbootstrap.com/snippets/jquery/mdbootstrap/50514?action=full_screen_mode -->
-    <div class="p-4">
-      {% if error %}
-      <p>That bid is lower than the highest bid, try agian</p>
-      {% endif %}
-        <div class="col-md-6 mb-4">
-          {% if item.image %}
-            <img src="{{ item.image }}" alt="{{ item.item }}" width="500" >
-          {% else %}
-            <p>Seller has not uploaded any pictures of this item.</p>
-          {% endif %}
-          </div>
-
-        <p class="lead">Starting bid
-          <span class="mr-1">
-            {{ item.starting_bid | floatformat:2 }}</span>
-        </p>
-
-        <p class="lead font-weight-bold">Description</p>
-       
-        <p>{{ item.description }}</p>
-        {% if not item_owner %}
-        {% if user.is_authenticated %}
-        <form name="{{ item.id }}" action="{% url 'listing' item.id %}" method="post" class="d-flex justify-content-left">
+    {{ item }}
+    {% if isuser %}
+        {% if user != owner %}
+        <form id="watch_button" action="" method="POST">
             {% csrf_token %}
-            {% if watched %}
-            <div id="unwatchButton">
-              <button class="btn btn-primary btn-md my-0 p" name="unwatch" type="submit">Remove from watch list
-                <i class="fas fa-shopping-cart ml-1"></i>
-              </button>
-            </div>
-            {% else %}
-            <div id="watchButton">
-              <button class="btn btn-primary btn-md my-0 p" name="watch" type="submit">Add to watch list
-                <i class="fas fa-shopping-cart ml-1"></i>
-              </button>
-            </div>
-            {% endif %}
+            <!-- checks if a user is logged in -->
+            
+                {% if not watched %}
+                    <input type="Submit" name="Watch" value="watch"/>
+                {% else %}
+                    <input type="Submit" name="unWatch" value="Unwatch"/>
+                {% endif %}
+            
         </form>
-      
-        <div id="bidForm">
-          <form action="{% url 'listing' item.id %}" method="post">
-            {% csrf_token %}
-            {{ newbidform.amount }}
-            <button class="btn btn-primary btn-md my-0 p" name="bid" type="submit">bid
-              <i class="fas fa-shopping-cart ml-1"></i>
-            </button>
-          </form>
-          
-        </div>
+        {% if message %}
+            sorry that bid was not high enough, try agian with a higher bid.
         {% endif %}
-      </div>
-      {% endif %}
-{% endblock %}  
+        <form id="bid" action="" method="POST">
+            {% csrf_token %}
+            {{ form }}
+            <input name="bidding" type="submit" value="Bid"> 
+        </form>
+        {% endif %}
+        {% endif %}
+{% endblock %}

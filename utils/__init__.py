@@ -1,3 +1,6 @@
-def test():
-    watching = {"ben": 1}
-    return watching["ben"]
+watching = {}
+def test(item, watcher):
+    
+    watching["watcher"] = item
+    return watching
+        
