@@ -3,9 +3,9 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from .models import User, AuctionListing, WatchList, Bid
-from .forms import NewListingForm, NewBid
-from utils import test
+from .models import User, AuctionListing, WatchList, Bid, Comment
+from .forms import NewListingForm, NewBid, Comments
+from utils import test, CATEGORIES
 
 def index(request):
     
@@ -90,60 +90,119 @@ def new_listing(request):
 def listing(request, listing_id):
     user = request.user
     item = AuctionListing.objects.get(pk=listing_id)
-    owner = item.user
     message = False
-    print("user", user)
+    comments = False
+    
+       
     # code for watch button, Working!
-    if user:
-        print("usertrue")
-    else:
-        print("userfalse")
+    
     if request.method == "POST":
+        # If 'watch' button pressed do this:
         if "Watch" in request.POST:
             watched = WatchList.objects.create(watching=item, watcher=user)
             watched.save()
+        # If 'unwatch' buttn pressed do this:
         if "unWatch" in request.POST:
             WatchList.objects.filter(watching=item, watcher=user).delete()
         
+        # If 'close' button pressed do this:
+        if "close" in request.POST:
+            if Bid.objects.filter(bid_item=item).exists():
+                winner = Bid.objects.get(bid_item=item).bidder_id
+                Bid.objects.filter(bid_item=item).update(winner_id=winner)
+        
+        # Gets bid from bid form, checks whether it is greater than current bid and starting_bid
+        # if not return message to user telling them so. If it is, it gets added to 
+        # the bids table
         if "bidding" in request.POST:
-            print("bidding")
             form = NewBid(request.POST)
-            print(form)
+            
             if form.is_valid():
-                print("valid")
                 amount = form.cleaned_data["amount"]
-                print(amount, item)
-                ### CHECK CHECK CHECK 
+                
             if not Bid.objects.filter(bid_item=item).exists() and amount >= item.starting_bid:
-                print("newbid")
                 new_bid = Bid.objects.create(bid=amount, bid_item=item, bidder=user)
                 new_bid.save()
             
             elif Bid.objects.filter(bid_item=item).exists() and Bid.objects.filter(bid_item=item)[0].bid < amount:
-                print("change")
-                Bid.objects.filter(bid_item=item).delete()
-                update_bid = Bid.objects.create(bid=amount, bidder=user, bid_item=item)
-                update_bid.save()
+                Bid.objects.filter(bid_item=item).update(bid=amount, bidder=user, bid_item=item)
             else:
                 message = True
-            print("else")
-                
-        print("one")
-        # return render(request, "auctions/listing.html", {
-        #     "owner": owner, "form": NewBid(), "item": item, 
-        #     "user": user, "watched": WatchList.objects.filter(watching=item, watcher=user), 
-        #     "isuser": True, "message": message
-        # })
-    
         
+        # Takes comment and adds it to the comments table
+        if "comment" in request.POST:
+            form = Comments(request.POST)
+            if form.is_valid():
+                comment = form.cleaned_data["comment"]
+                new_comment = Comment.objects.create(comment=comment, commented_item=item, user_commented=user)
+                new_comment.save()
+    
+    # checks if any bids have been made on the 'item'
+    try:
+        bid = Bid.objects.get(bid_item=item).bid 
+    except:
+        bid = False
+    
+    # checks if there is a winner, will also mean the auction is closed, if so
+    try:
+        winner = Bid.objects.filter(bid_item=item)[0].winner
+    except:
+        winner = False
+
+    # checks for any comments for 'item'
+    if Comment.objects.filter(commented_item=item):
+        comments = Comment.objects.filter(commented_item=item)
+
+    # checks if user is logged in, not a great way of doing it though, DRY!     
     if not User.objects.filter(username=user).exists():
         return render(request, "auctions/listing.html", {
-                    "item": item, "isuser": False    
+                    "item": item, "isuser": False, "price": bid, "user_comments": comments
                 })
     else:
-        print("else")
+        print(comments)
         return render(request, "auctions/listing.html", {
-            "owner": owner, "form": NewBid(), "item": item, 
+            "owner": item.user, "form": NewBid(), "item": item, 
             "user": user, "watched": WatchList.objects.filter(watching=item, watcher=user), 
-            "isuser": True, "message": message
+            "isuser": True, "message": message, "price": bid, "winner": winner, 
+            "comments": Comments(), "user_comments": comments
         })
+
+def watching(request):
+    user = request.user
+    users_watched_items = [AuctionListing.objects.get(item=i.watching) for i in user.user.all()]
+    
+    return render(request, "auctions/watching.html", {
+        "watching": users_watched_items
+    })
+
+def categories(request):
+    dic = {}
+    for i in AuctionListing.objects.all():
+        if i.category not in dic:
+            dic[i.category] = [i.item]
+        else:
+            dic[i.category].append(i.item)
+    # cats = [i[0] for i in CATEGORIES]
+    # {% for i, j in dic.items %}
+    #     {{i}}
+    #     <br>
+    #     {% for h in j %}
+    #     {{h}}
+    #     <br>
+    #     {% endfor %}
+    #     <br>
+    #     <br>
+    # {% endfor %}
+    return render(request, "auctions/categories.html", {
+        "dic": dic,  "categories": CATEGORIES
+    })
+
+def categories_contents(request, categoryName):
+    
+    cat = CATEGORIES[categoryName][1]
+    print(cat)
+    items_in_category = AuctionListing.objects.filter(category=cat)
+    print(items_in_category)
+    return render(request, "auctions/categories_contents.html", {
+        "cate": items_in_category
+    })

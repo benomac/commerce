@@ -1,11 +1,11 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    
-    
-    <!-- Part of this html code was taken from an online templates website, the address is
-    https://mdbootstrap.com/snippets/jquery/mdbootstrap/50514?action=full_screen_mode -->
-    {% for item in items %}
+<h3>Contents</h3>
+{% if not cate %}
+    no items
+{% else %}
+    {% for item in cate %}
     <div id="indexItemName">
         <h4>{{ item.item }}</h4>
         {{item.user}}
@@ -31,6 +31,6 @@
         <a href="{% url 'listing' item.id %}">See listing for {{ item }}</a>
 
       </div>
-      <hr>
     {% endfor %}
+{% endif %}
 {% endblock %}

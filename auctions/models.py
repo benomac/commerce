@@ -4,7 +4,6 @@ from django.db import models
 
 class User(AbstractUser):
     # items = models.ManyToManyField(AuctionListing, on_delete=models.SET_NULL, null=True, related_name="listing")
-    
     def __str__(self):
         return f"{self.username}"
 
@@ -24,15 +23,19 @@ class Bid(models.Model):
     bid = models.FloatField()
     bid_item = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, null=True, related_name="buying")
     bidder = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bidded")
+    winner = models.ForeignKey(User, on_delete=models.CASCADE, null=True,  related_name="winner")
 
+    def __str__(self):
+        return str(self.bid_item)
 class Comment(models.Model):
     comment = models.CharField(max_length=255)
     commented_item = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name="commented")
     user_commented = models.ForeignKey(User, on_delete=models.CASCADE, related_name="usercomments")
 
 class WatchList(models.Model):
-    watching = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name="watching")
+    watching = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name="watching1")
     watcher = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user")
     
     def __str__(self):
         return f"{self.watching}: {self.watcher_id}"
+

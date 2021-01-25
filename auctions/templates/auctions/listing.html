@@ -2,28 +2,110 @@
     <title>{% block title %}Listing{% endblock %}</title>
 {% block body %}
     
-    {{ item }}
-    {% if isuser %}
-        {% if user != owner %}
-        <form id="watch_button" action="" method="POST">
-            {% csrf_token %}
-            <!-- checks if a user is logged in -->
-            
-                {% if not watched %}
-                    <input type="Submit" name="Watch" value="watch"/>
-                {% else %}
-                    <input type="Submit" name="unWatch" value="Unwatch"/>
-                {% endif %}
-            
-        </form>
+    <div>
         {% if message %}
             sorry that bid was not high enough, try agian with a higher bid.
         {% endif %}
-        <form id="bid" action="" method="POST">
-            {% csrf_token %}
-            {{ form }}
-            <input name="bidding" type="submit" value="Bid"> 
-        </form>
+        <div>
+            {{ item }}
+        </div>
+        <div>
+            listed by {{item.user}}
+        </div>
+        <div>
+            {% if item.category %}
+                catergory: {{item.category}}
+            {% else %}
+                catergory: No category selected.
+            {% endif %}
+        </div>
+        
+    </div>
+    <div class="listing_image">
+        {% if item.image %}
+            <div id="item_image">   
+                <img src="{{item.image}}" alt="{{item.item}}" width="500">
+            </div> 
+        {% else %}
+            <div id="nopic" class="listing_item">
+                Seller has not uploaded any pictures of this item.
+            </div>
         {% endif %}
+    </div>
+    <div id="current_value" >
+        {% if price %}
+            <div class="listing_item_value" >
+                starting bid was: {{ item.starting_bid | floatformat:2 }}
+            </div>
+            <div class="listing_item_value" >
+                current price: {{ price | floatformat:2}}
+            </div>
+        {% else %}
+            <div class="listing_item_value" >
+                starting bid: {{ item.starting_bid | floatformat:2}}
+            </div>
         {% endif %}
+    </div>
+    <div id="description" class="listing_item" >
+        {{ item.description }}
+    </div>
+    {% if user_comments %}
+        {% for comment in user_comments %}    
+            {{ comment.user_commented }} said: <br>
+            {{ comment.comment }}<br>
+            <br>
+        {% endfor %}
+    {% endif %}
+    
+    {% if isuser %}
+        <div id="comment">
+            <form id="comment" action="" method="POST">
+                {% csrf_token %}
+                {{ comments }}
+                <input type="Submit" value="submit"/>
+            </form>
+        </div>
+    {% endif %}
+    {% if isuser %}
+        {% if user != owner %}
+            {% if not winner %}
+                <form id="watch_button" action="" method="POST">
+                    {% csrf_token %}
+                    <!-- checks if a user is logged in -->
+                    
+                    {% if not watched %}
+                        <input type="Submit" name="Watch" value="watch"/>
+                    {% else %}
+                        <input type="Submit" name="unWatch" value="Unwatch"/>
+                    {% endif %}
+                
+                </form>
+                    
+                <form id="bid" action="" method="POST">
+                    {% csrf_token %}
+                    {{ form }}
+                    <input name="bidding" type="submit" value="Bid"> 
+                </form>
+                {% else %}
+                <h3>This auction is closed.</h3>
+                {% if user == winner %}
+                <h3> {{ winner }}, you are the winner!</h3>
+                {% endif %}
+            {% endif %}
+        {% else %}
+            {% if not winner %}
+                {% if price %}
+                    <form id="bid" action="" method="POST">
+                        {% csrf_token %}
+                        
+                        <input name="close" type="submit" value="close Auction"> 
+                    </form>
+                {%endif%}
+            {% else %}
+                
+                <h3>This auction is closed {{winner}}</h3>
+
+            {% endif %}
+        {% endif %}
+    {% endif %}
 {% endblock %}

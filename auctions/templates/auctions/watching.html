@@ -1,0 +1,17 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<h3>Your watched items</h3>
+{% if watching %}
+    {% for watched in watching %}
+        {{ watched }} 
+        <br>
+        <img src="{{ watched.image }}" alt="{{ watched }}" width="200" > 
+        <br>
+        <a href="{% url 'listing' watched.id %}">See listing for {{ item }}</a>
+        <br>
+
+    {% endfor %}
+{% endif %}
+
+{% endblock %}
