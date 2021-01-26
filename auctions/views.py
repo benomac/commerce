@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from .models import User, AuctionListing, WatchList, Bid, Comment
 from .forms import NewListingForm, NewBid, Comments
-from utils import test, CATEGORIES
+from utils import CATEGORIES
 
 def index(request):
     
@@ -199,10 +199,10 @@ def categories(request):
 
 def categories_contents(request, categoryName):
     
-    cat = CATEGORIES[categoryName][1]
+    cat = CATEGORIES[categoryName]
     print(cat)
-    items_in_category = AuctionListing.objects.filter(category=cat)
+    items_in_category = AuctionListing.objects.filter(category=cat[1])
     print(items_in_category)
     return render(request, "auctions/categories_contents.html", {
-        "cate": items_in_category
+        "cat": cat, "items": items_in_category
     })

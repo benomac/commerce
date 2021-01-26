@@ -1,8 +1,4 @@
-watching = {}
-def test(item, watcher):
-    
-    watching["watcher"] = item
-    return watching
+
 
 CATEGORIES = [(0, 'Beauty'),
             (1, 'Books'), 

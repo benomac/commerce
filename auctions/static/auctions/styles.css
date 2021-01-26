@@ -1,3 +1,22 @@
 body {
     padding: 10px;
 }
+
+.index_item_box, #categoryName, #category {
+    padding-left: 100px;
+    
+    width: 50%;
+}
+
+.indexItemName, .user, .starting_bid {
+    width: 50%;
+    float: right;
+}
+
+.description {
+    
+}
+
+.image {
+    width: 200px;
+}

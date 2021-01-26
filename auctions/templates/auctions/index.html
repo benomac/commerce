@@ -1,36 +1,6 @@
 {% extends "auctions/layout.html" %}
-
 {% block body %}
-    
-    
-    <!-- Part of this html code was taken from an online templates website, the address is
-    https://mdbootstrap.com/snippets/jquery/mdbootstrap/50514?action=full_screen_mode -->
-    {% for item in items %}
-    <div id="indexItemName">
-        <h4>{{ item.item }}</h4>
-        {{item.user}}
-    </div> 
-    <div class="p-4">
+  
+  {% include "auctions/list.html" %}
 
-        <div class="col-md-6 mb-4">
-          {% if item.image %}
-            <img src="{{ item.image }}" alt="{{ item.item }}" width="200" >
-          {% else %}
-            <p>Seller has not uploaded any pictures of this item.</p>
-          {% endif %}
-          </div>
-
-        <p class="lead">Starting bid
-          <span class="mr-1">
-            {{ item.starting_bid | floatformat:2 }}</span>
-        </p>
-
-        <p class="lead font-weight-bold">Description</p>
-        
-        <p>{{ item.description }}</p>
-        <a href="{% url 'listing' item.id %}">See listing for {{ item }}</a>
-
-      </div>
-      <hr>
-    {% endfor %}
 {% endblock %}
