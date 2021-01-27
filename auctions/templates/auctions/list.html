@@ -2,18 +2,21 @@
 {% for item in items %}
 <div class="index_item_box">
   
-  <div class="image">
+  {% if user == item.user %}
+  {{ item.user }}
+    <p>You own this.</p>
+  {% endif %}
+  <div class="indexItemName">
+    <h4>{{ item.item }}</h4>
+  </div>
+
+  <div class="item_image">
     {% if item.image %}
       <img src="{{ item.image }}" alt="{{ item.item }}" width="200" >
     {% else %}
       <p>Seller has not uploaded any pictures of this item.</p>
     {% endif %}
   </div>
-
-  <div class="indexItemName">
-    <h4>{{ item.item }}</h4>
-  </div>
-
   <div class="starting_bid">
     <p>Starting bid
       <span class="mr-1">
@@ -25,9 +28,9 @@
     <h5>Description</h5>
     
     <p>{{ item.description }}</p>
-    <a href="{% url 'listing' item.id %}">See listing for {{ item }}</a>
   </div>
+  <a href="{% url 'listing' item.id %}">See listing for {{ item }}</a>
 
 </div>
-<hr>
+<hr id="list_hr">
 {% endfor %}

@@ -1,22 +1,41 @@
+* {
+    box-sizing: border-box;
+  }
+
+.item_image {
+    width: 200px;
+    margin: 0 auto
+}
+
+#list_hr {
+    width: 30%;
+}
 body {
     padding: 10px;
 }
-
-.index_item_box, #categoryName, #category {
-    padding-left: 100px;
+#categoryName{
+    float:left;
+}
+.index_item_box {
+    border: 1px solid black;
+    padding: 20px 10px 10px 10px;
+    margin: 0 auto;
+    width: 30%;
+    overflow: scroll;
     
-    width: 50%;
+}
+
+.description {
+    max-height: 100px;
+    position: relative;
+    overflow: scroll;
+    border: 1px solid rgb(207, 207, 207);
+    padding:3px;
 }
 
 .indexItemName, .user, .starting_bid {
     width: 50%;
-    float: right;
 }
 
-.description {
-    
-}
 
-.image {
-    width: 200px;
-}
+

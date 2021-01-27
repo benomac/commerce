@@ -198,11 +198,12 @@ def categories(request):
     })
 
 def categories_contents(request, categoryName):
-    
+    user = request.user
     cat = CATEGORIES[categoryName]
     print(cat)
     items_in_category = AuctionListing.objects.filter(category=cat[1])
-    print(items_in_category)
+    
+    print(items_in_category[0].user)
     return render(request, "auctions/categories_contents.html", {
-        "cat": cat, "items": items_in_category
+        "cat": cat, "items": items_in_category, "user": user
     })
