@@ -1,41 +1,70 @@
 * {
     box-sizing: border-box;
   }
+/* * {
+    border: 1px solid red !important;
+} */
+.youOwn {
+    width: 300px;
+    float: right; 
+    position: absolute;
+    margin: 15px;
+}
+.index_item_box {
+    border: 1px solid rgb(196, 189, 189);
+    border-radius: 25px;
+    height: 310px;
+    /* overflow: scroll; */
+    width: 750px;
+    margin: auto;
+    margin-top: 50px;;
+    padding: 10px 10px 60px 10px;
+    min-width: 100px;
+  
+}
+.item_image {
+    border: 1px solid rgb(196, 189, 189);
+    border-radius: 25px;
+    max-width: 250px;
+    /* background-color: blueviolet; */
+    overflow: scroll;
+    position: relative;
+    margin-left: 15px;
+}
 
 .item_image {
     width: 200px;
-    margin: 0 auto
+    object-fit: scale-down;
 }
 
-#list_hr {
-    width: 30%;
-}
-body {
-    padding: 10px;
-}
-#categoryName{
-    float:left;
-}
-.index_item_box {
-    border: 1px solid black;
-    padding: 20px 10px 10px 10px;
-    margin: 0 auto;
-    width: 30%;
-    overflow: scroll;
-    
+.listImage{
+    height: 200px;
 }
 
 .description {
-    max-height: 100px;
-    position: relative;
+    
+    float: right;
+    /* border: 1px solid black; */ 
+    width: 400px;
+    min-width:100px;
+    height: 200px;
     overflow: scroll;
-    border: 1px solid rgb(207, 207, 207);
-    padding:3px;
+    position: relative;
+    bottom: 280px;
+    right: 50px;
+    clear: right;
 }
 
-.indexItemName, .user, .starting_bid {
+.starting_bid {
+    float: right;
+    position: relative;
+    color: red;
+    margin-right: 10px;  
+    
+}
+
+#list_hr {
+    padding-top: 30px;
     width: 50%;
+    margin: auto;
 }
-
-
-

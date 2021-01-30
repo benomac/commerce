@@ -1,36 +1,46 @@
-
+{% if not items %}
+no items in this category
+{% endif %}
 {% for item in items %}
 <div class="index_item_box">
   
-  {% if user == item.user %}
-  {{ item.user }}
-    <p>You own this.</p>
-  {% endif %}
+  
   <div class="indexItemName">
     <h4>{{ item.item }}</h4>
   </div>
-
+  {% if item.image %}
   <div class="item_image">
-    {% if item.image %}
-      <img src="{{ item.image }}" alt="{{ item.item }}" width="200" >
-    {% else %}
-      <p>Seller has not uploaded any pictures of this item.</p>
-    {% endif %}
+    <img class="listImage" src="{{ item.image }}" alt="{{ item.item }}">
   </div>
+  {% else %}
+      <div class="item_image">
+        <p>Seller has not uploaded any pictures of this item.</p>
+      </div>
+  {% endif %}
+  
   <div class="starting_bid">
     <p>Starting bid
       <span class="mr-1">
         {{ item.starting_bid | floatformat:2 }}</span>
+        <br>
+        <a href="{% url 'listing' item.id %}">See listing for {{ item }}</a>
     </p>
   </div>
 
-  <div class="description">
+  <div class="description item">
     <h5>Description</h5>
     
-    <p>{{ item.description }}</p>
-  </div>
-  <a href="{% url 'listing' item.id %}">See listing for {{ item }}</a>
-
+    <p class="desc_content">{{ item.description }}</p>
+  </div>  
+  {% if user == item.user %}
+<div>
+  <p class="youOwn">{{ item.user }}, you own this.</p>
 </div>
-<hr id="list_hr">
+{% endif %}
+</div>
+
+<div  id="list_hr">
+<hr>
+</div>
+
 {% endfor %}
