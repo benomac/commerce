@@ -118,14 +118,14 @@ def listing(request, listing_id):
             form = NewBid(request.POST)
             
             if form.is_valid():
-                amount = form.cleaned_data["amount"]
+                Bid_amount = form.cleaned_data["Bid_amount"]
                 
-            if not Bid.objects.filter(bid_item=item).exists() and amount >= item.starting_bid:
-                new_bid = Bid.objects.create(bid=amount, bid_item=item, bidder=user)
+            if not Bid.objects.filter(bid_item=item).exists() and Bid_amount >= item.starting_bid:
+                new_bid = Bid.objects.create(bid=Bid_amount, bid_item=item, bidder=user)
                 new_bid.save()
             
-            elif Bid.objects.filter(bid_item=item).exists() and Bid.objects.filter(bid_item=item)[0].bid < amount:
-                Bid.objects.filter(bid_item=item).update(bid=amount, bidder=user, bid_item=item)
+            elif Bid.objects.filter(bid_item=item).exists() and Bid.objects.filter(bid_item=item)[0].bid < Bid_amount:
+                Bid.objects.filter(bid_item=item).update(bid=Bid_amount, bidder=user, bid_item=item)
             else:
                 message = True
         
@@ -172,7 +172,7 @@ def watching(request):
     users_watched_items = [AuctionListing.objects.get(item=i.watching) for i in user.user.all()]
     
     return render(request, "auctions/watching.html", {
-        "watching": users_watched_items
+        "items": users_watched_items
     })
 
 def categories(request):

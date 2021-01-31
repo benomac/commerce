@@ -8,8 +8,8 @@
         <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
     </head>
     <body>
-        <h1>Auctions</h1>
-        <div>
+        <h1 id="mainTitle">Auctions</h1>
+        <div id="signedIn">
             {% if user.is_authenticated %}
                 Signed in as <strong>{{ user.username }}</strong>.
             {% else %}

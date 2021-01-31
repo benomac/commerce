@@ -1,14 +1,13 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<div class="categoryName">
-  <h5>Category:</h5>
+<div class="categoryBlock">
+  
+    <h2 class="category">Category:</h2>
+ 
+    <h3 class="category">{{cat.1}}</h3>
 </div>
 
-<div>
-  <p id="category">{{cat.1}}</p>
-</div>
-<hr>
   {% include "auctions/list.html" %}
 
 {% endblock %}

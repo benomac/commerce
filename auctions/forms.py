@@ -10,7 +10,7 @@ class NewListingForm(forms.Form):
     starting_bid = forms.FloatField()
 
 class NewBid(forms.Form):
-    amount = forms.FloatField()
+    Bid_amount = forms.FloatField()
 
 class Comments(forms.Form):
     comment = forms.CharField(label="Comment")

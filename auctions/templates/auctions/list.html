@@ -1,12 +1,12 @@
 {% if not items %}
-no items in this category
+<h3 id="noItems">no items here</h3>
 {% endif %}
 {% for item in items %}
 <div class="index_item_box">
   
   
   <div class="indexItemName">
-    <h4>{{ item.item }}</h4>
+    <h4 id="itemListItem">{{ item.item }}</h4>
   </div>
   {% if item.image %}
   <div class="item_image">

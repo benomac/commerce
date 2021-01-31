@@ -13,7 +13,7 @@ class AuctionListing(models.Model):
     description = models.CharField(max_length=255)
     starting_bid = models.FloatField()
     # May have to make image max_length longer??
-    image = models.CharField(max_length=255)
+    image = models.CharField(max_length=20000)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="owner")
     
     def __str__(self):

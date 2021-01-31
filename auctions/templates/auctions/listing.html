@@ -2,29 +2,31 @@
     <title>{% block title %}Listing{% endblock %}</title>
 {% block body %}
     
-    <div>
+    <div id="bidMessage">
         {% if message %}
-            sorry that bid was not high enough, try agian with a higher bid.
+            <h3 id="notEnough">Sorry that bid was not high enough, try agian with a higher bid.</h3>
         {% endif %}
-        <div>
-            {{ item }}
-        </div>
-        <div>
-            listed by {{item.user}}
-        </div>
-        <div>
+    </div>
+    <div id="itemDeets"> 
+    
+            
+            Listed by {{item.user | title }}, 
+        
             {% if item.category %}
                 catergory: {{item.category}}
             {% else %}
+                <br>
                 catergory: No category selected.
             {% endif %}
-        </div>
         
-    </div>
+    </div>  
+    
+<div class="listingBox">
+    <h3>{{ item.item }}</h3>
     <div class="listing_image">
         {% if item.image %}
-            <div id="item_image">   
-                <img src="{{item.image}}" alt="{{item.item}}" width="500">
+            <div>   
+                <img id="item_image" src="{{item.image}}" alt="{{item.item}}" width="500">
             </div> 
         {% else %}
             <div id="nopic" class="listing_item">
@@ -32,6 +34,12 @@
             </div>
         {% endif %}
     </div>
+    <p class="listP">Description</p>
+    <div id="description" class="listing_item" >
+        {{ item.description }}
+    </div>
+
+    <p class="listP">Pricing and bids</p>
     <div id="current_value" >
         {% if price %}
             <div class="listing_item_value" >
@@ -46,9 +54,15 @@
             </div>
         {% endif %}
     </div>
-    <div id="description" class="listing_item" >
-        {{ item.description }}
-    </div>
+    {% if isuser and item.user != user %}
+    <form id="bid" action="" method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <input name="bidding" type="submit" value="Bid"> 
+    </form>
+    {% endif %}
+    <p class="listP">Comments</p>
+    <div id="comments">
     {% if user_comments %}
         {% for comment in user_comments %}    
             {{ comment.user_commented }} said: <br>
@@ -56,7 +70,7 @@
             <br>
         {% endfor %}
     {% endif %}
-    
+    </div>
     {% if isuser %}
         <div id="comment">
             <form id="comment" action="" method="POST">
@@ -81,11 +95,7 @@
                 
                 </form>
                     
-                <form id="bid" action="" method="POST">
-                    {% csrf_token %}
-                    {{ form }}
-                    <input name="bidding" type="submit" value="Bid"> 
-                </form>
+                
                 {% else %}
                 <h3>This auction is closed.</h3>
                 {% if user == winner %}
@@ -102,10 +112,11 @@
                     </form>
                 {%endif%}
             {% else %}
-                
-                <h3>This auction is closed {{winner}}</h3>
-
+                <div id="winner">
+                    <h3>This auction is closed, {{winner}} is the winner.</h3>
+                </div>
             {% endif %}
         {% endif %}
     {% endif %}
+</div>
 {% endblock %}

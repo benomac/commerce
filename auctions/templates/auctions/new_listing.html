@@ -1,9 +1,9 @@
 {% extends "auctions/layout.html" %}
 <title>{% block title %}New Listing{% endblock %}</title>
 {% block body %}
-    <h2>Create A New Listing</h2>
+    <h2 id="newLisitngTitle">Create A New Listing</h2>
     
-    <form action="{% url 'new_listing' %}" method="post">
+    <form class="newListing" action="{% url 'new_listing' %}" method="post">
         {% csrf_token %}
         
         {% for element in form %}
@@ -13,7 +13,7 @@
             </div>
         {% endfor %}
         <div>
-            <input type="submit" value="Submit entry"> 
+            <input class="sub" type="submit" value="Submit entry"> 
         </div>
     </form>
 

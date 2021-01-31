@@ -1,9 +1,27 @@
 * {
     box-sizing: border-box;
   }
-/* * {
+
+  /* * {
     border: 1px solid red !important;
-} */
+  } */
+
+/* main top bar css */
+
+#mainTitle, #watching {
+    width: fit-content;
+    margin: auto;
+    padding: 20px;
+}
+
+#signedIn {
+    margin-left: 20px;
+}
+
+hr {
+    width: 90%;
+}
+/* index and category contents css */
 .youOwn {
     width: 300px;
     float: right; 
@@ -30,12 +48,10 @@
     overflow: scroll;
     position: relative;
     margin-left: 15px;
-}
-
-.item_image {
     width: 200px;
     object-fit: scale-down;
 }
+
 
 .listImage{
     height: 200px;
@@ -67,4 +83,132 @@
     padding-top: 30px;
     width: 50%;
     margin: auto;
+}
+
+/* categories css */
+
+#newLisitngTitle, .categoryBlock {
+   
+    margin: 50px auto ;
+    width: 1000px; 
+    text-align: center;
+}
+
+.category {
+    display: inline-block;
+}
+
+#cateMain {
+    padding-bottom: 20px;
+}
+
+.cateBox {
+    border: 1px solid rgb(196, 189, 189);
+    border-radius: 25px;
+    overflow: visible;
+    padding: 20px;
+    text-align: center;
+}
+
+/* New listing page css */
+
+.newListing {
+    border: 1px solid rgb(196, 189, 189);
+    border-radius: 25px;
+    padding: 20px;
+}
+
+.newListing, .cateBox, #cateMain {
+    width: fit-content;
+    margin: auto;
+}
+
+.regForm {
+    width: 700px;
+    margin: auto;
+    padding: 10px;
+}
+#noItems {
+    width: fit-content;
+    margin: auto;
+    padding: 10px;
+}
+
+.sub {
+    margin-top: 10px;
+}
+/* listing page css */
+
+#itemListItem {
+    margin-left: 30px;
+}
+
+.listingBox {
+    width: 500px;
+    border: 1px solid rgb(196, 189, 189);
+    border-radius: 25px;
+    padding: 20px;
+    margin: auto;
+   
+}
+
+#item_image {
+    object-fit: fill;
+}
+
+.listing_image {
+    border: 1px solid rgb(196, 189, 189);
+    border-radius: 25px;
+    height: fit-content;
+    overflow: scroll;
+    position: relative;
+   
+}
+
+.listing_item_value {
+    padding: 5px;
+    
+}
+
+#current_value {
+    border: 1px solid rgb(196, 189, 189);
+    border-radius: 25px;
+    padding: 10px;
+    
+}
+
+#comments, #description {
+    border: 1px solid rgb(196, 189, 189);
+    border-radius: 25px;
+    padding: 20px;
+}
+
+
+.listP {
+    text-decoration: underline;
+    margin: 10px 0 0 10px;
+    color: grey;
+}
+
+#bid, #comment, #watch_button {
+    width: fit-content;
+    margin: 20px auto;
+}
+
+#notEnough, #bidMessage {
+    color: red;
+    width: fit-content;
+    margin: auto;
+}
+
+#itemDeets {
+    width: fit-content;
+    margin: 0 auto 10px auto;
+   
+}
+
+#winner {
+    width: fit-content;
+    margin: auto;
+    
 }
