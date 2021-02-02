@@ -22,34 +22,34 @@ hr {
     width: 90%;
 }
 /* index and category contents css */
-.youOwn {
+/* .youOwn {
     width: 300px;
     float: right; 
     position: absolute;
-    margin: 15px;
-}
+    margin-left: 30px;
+} */
 .index_item_box {
     border: 1px solid rgb(196, 189, 189);
-    border-radius: 25px;
-    height: 310px;
-    /* overflow: scroll; */
+    /* border-radius: 25px; */
+    height: fit-content;
+    
     width: 750px;
     margin: auto;
     margin-top: 50px;;
-    padding: 10px 10px 60px 10px;
+    padding: 10px 10px 10px 10px;
     min-width: 100px;
   
 }
 .item_image {
     border: 1px solid rgb(196, 189, 189);
-    border-radius: 25px;
+    /* border-radius: 25px; */
     max-width: 250px;
     /* background-color: blueviolet; */
     overflow: scroll;
     position: relative;
     margin-left: 15px;
-    width: 200px;
-    object-fit: scale-down;
+    width: fit-content;
+    
 }
 
 
@@ -72,10 +72,12 @@ hr {
 }
 
 .starting_bid {
-    float: right;
+    
     position: relative;
     color: red;
     margin-right: 10px;  
+    margin-top: 20px;
+    margin-left: 20px;
     
 }
 
@@ -104,7 +106,7 @@ hr {
 
 .cateBox {
     border: 1px solid rgb(196, 189, 189);
-    border-radius: 25px;
+    /* border-radius: 25px; */
     overflow: visible;
     padding: 20px;
     text-align: center;
@@ -114,7 +116,7 @@ hr {
 
 .newListing {
     border: 1px solid rgb(196, 189, 189);
-    border-radius: 25px;
+    /* border-radius: 25px; */
     padding: 20px;
 }
 
@@ -124,7 +126,7 @@ hr {
 }
 
 .regForm {
-    width: 700px;
+    width: 400px;
     margin: auto;
     padding: 10px;
 }
@@ -146,7 +148,7 @@ hr {
 .listingBox {
     width: 500px;
     border: 1px solid rgb(196, 189, 189);
-    border-radius: 25px;
+    /* border-radius: 25px; */
     padding: 20px;
     margin: auto;
    
@@ -158,7 +160,7 @@ hr {
 
 .listing_image {
     border: 1px solid rgb(196, 189, 189);
-    border-radius: 25px;
+    /* border-radius: 25px; */
     height: fit-content;
     overflow: scroll;
     position: relative;
@@ -172,14 +174,14 @@ hr {
 
 #current_value {
     border: 1px solid rgb(196, 189, 189);
-    border-radius: 25px;
+    /* border-radius: 25px; */
     padding: 10px;
     
 }
 
 #comments, #description {
     border: 1px solid rgb(196, 189, 189);
-    border-radius: 25px;
+    /* border-radius: 25px; */
     padding: 20px;
 }
 

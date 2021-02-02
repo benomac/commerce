@@ -3,9 +3,11 @@
 {% block body %}
     <h2 id="cateMain">Categories</h2>
     <div class="cateBox">
+        <!-- Displays all the categories -->
         {% for item in categories %}
             <a class="cateList" href="/categories/{{item.0}}">{{item.1}}</a>
             <br>
         {% endfor %}
     </div>   
+    <hr>
 {% endblock %}

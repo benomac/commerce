@@ -1,13 +1,12 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
+<!-- categories page title -->
 <div class="categoryBlock">
-  
-    <h2 class="category">Category:</h2>
- 
-    <h3 class="category">{{cat.1}}</h3>
+  <h2 class="category">Category:</h2>
+  <h3 class="category">{{cat.1}}</h3>
 </div>
-
+  <!-- includes the html in the list.html file, it is used also by the index page -->
   {% include "auctions/list.html" %}
 
 {% endblock %}

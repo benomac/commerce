@@ -1,28 +1,29 @@
 {% extends "auctions/layout.html" %}
     <title>{% block title %}Listing{% endblock %}</title>
 {% block body %}
-    
+    <!-- Displays message if bid wasn't high enough -->
     <div id="bidMessage">
         {% if message %}
             <h3 id="notEnough">Sorry that bid was not high enough, try agian with a higher bid.</h3>
         {% endif %}
     </div>
+
+    <!-- Displays the category, if one was selected when creating a listing. -->
     <div id="itemDeets"> 
-    
-            
-            Listed by {{item.user | title }}, 
-        
-            {% if item.category %}
-                catergory: {{item.category}}
-            {% else %}
-                <br>
-                catergory: No category selected.
-            {% endif %}
-        
+        Listed by {{item.user | title }}, 
+        {% if item.category %}
+            catergory: {{category}}
+        {% else %}
+            <br>
+            catergory: No category selected.
+        {% endif %}
     </div>  
-    
+
+<!-- Contains all the info about the listing -->
 <div class="listingBox">
+    
     <h3>{{ item.item }}</h3>
+    <!-- Displays image, if one was uploaded when creating listing -->
     <div class="listing_image">
         {% if item.image %}
             <div>   
@@ -34,11 +35,14 @@
             </div>
         {% endif %}
     </div>
+
+    <!-- Displays the item description. -->
     <p class="listP">Description</p>
     <div id="description" class="listing_item" >
         {{ item.description }}
     </div>
 
+    <!-- Displays the starting bid, adn current bid, if any have been made -->
     <p class="listP">Pricing and bids</p>
     <div id="current_value" >
         {% if price %}
@@ -54,13 +58,19 @@
             </div>
         {% endif %}
     </div>
+
+    <!-- Allows a logged in user to bid in item, if they are not the owner, and if there is not a winner -->
     {% if isuser and item.user != user %}
-    <form id="bid" action="" method="POST">
-        {% csrf_token %}
-        {{ form }}
-        <input name="bidding" type="submit" value="Bid"> 
-    </form>
+        {% if not winner %}
+        <form id="bid" action="" method="POST">
+            {% csrf_token %}
+            {{ form }}
+            <input name="bidding" type="submit" value="Bid"> 
+        </form>
+        {% endif %}
     {% endif %}
+    
+    <!-- Displays any comments that may have been made about the listing -->
     <p class="listP">Comments</p>
     <div id="comments">
     {% if user_comments %}
@@ -71,6 +81,8 @@
         {% endfor %}
     {% endif %}
     </div>
+
+    <!-- Comment form -->
     {% if isuser %}
         <div id="comment">
             <form id="comment" action="" method="POST">
@@ -80,37 +92,37 @@
             </form>
         </div>
     {% endif %}
+
+    <!-- Allows a logged in user, who isn't the owner, to watch the item, if there isn't a winner -->
     {% if isuser %}
         {% if user != owner %}
             {% if not winner %}
                 <form id="watch_button" action="" method="POST">
                     {% csrf_token %}
-                    <!-- checks if a user is logged in -->
                     
                     {% if not watched %}
                         <input type="Submit" name="Watch" value="watch"/>
                     {% else %}
                         <input type="Submit" name="unWatch" value="Unwatch"/>
                     {% endif %}
-                
                 </form>
-                    
-                
+                <!-- If user is logged in and is the winner, this tells them so. -->
                 {% else %}
-                <h3>This auction is closed.</h3>
+                    <h3>This auction is closed.</h3>
                 {% if user == winner %}
-                <h3> {{ winner }}, you are the winner!</h3>
+                    <h3> {{ winner }}, you are the winner!</h3>
                 {% endif %}
             {% endif %}
         {% else %}
+            <!-- Allows logged in user, who is the owner to close the auction, if there has been a bid. -->
             {% if not winner %}
                 {% if price %}
                     <form id="bid" action="" method="POST">
                         {% csrf_token %}
-                        
                         <input name="close" type="submit" value="close Auction"> 
                     </form>
                 {%endif%}
+            <!-- Display message, declaring the auction closed and who the winner is. -->
             {% else %}
                 <div id="winner">
                     <h3>This auction is closed, {{winner}} is the winner.</h3>
@@ -119,4 +131,6 @@
         {% endif %}
     {% endif %}
 </div>
+<hr>
+<br>
 {% endblock %}

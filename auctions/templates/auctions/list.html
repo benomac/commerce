@@ -1,13 +1,13 @@
+<!-- Show a message if there are no items to display -->
 {% if not items %}
 <h3 id="noItems">no items here</h3>
 {% endif %}
 {% for item in items %}
 <div class="index_item_box">
-  
-  
   <div class="indexItemName">
     <h4 id="itemListItem">{{ item.item }}</h4>
   </div>
+  <!-- Displays image if there is one for the item -->
   {% if item.image %}
   <div class="item_image">
     <img class="listImage" src="{{ item.image }}" alt="{{ item.item }}">
@@ -18,25 +18,25 @@
       </div>
   {% endif %}
   
+  <!-- Show the starting bid, and if the person logged in is the owner. -->
   <div class="starting_bid">
     <p>Starting bid
       <span class="mr-1">
         {{ item.starting_bid | floatformat:2 }}</span>
         <br>
         <a href="{% url 'listing' item.id %}">See listing for {{ item }}</a>
+        {% if user == item.user %}
+        <p>{{ item.user }}, you own this.</p>
+        {% endif %}
     </p>
   </div>
 
+  <!-- Shows description -->
   <div class="description item">
     <h5>Description</h5>
-    
     <p class="desc_content">{{ item.description }}</p>
   </div>  
-  {% if user == item.user %}
-<div>
-  <p class="youOwn">{{ item.user }}, you own this.</p>
-</div>
-{% endif %}
+
 </div>
 
 <div  id="list_hr">

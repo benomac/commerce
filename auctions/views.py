@@ -156,15 +156,17 @@ def listing(request, listing_id):
     # checks if user is logged in, not a great way of doing it though, DRY!     
     if not User.objects.filter(username=user).exists():
         return render(request, "auctions/listing.html", {
-                    "item": item, "isuser": False, "price": bid, "user_comments": comments
+                    "item": item, "isuser": False, "price": bid, "user_comments": comments,
+                    "category": CATEGORIES[int(item.category)][1]
                 })
     else:
-        print(comments)
+        print(type(item.category))
+        print("here", CATEGORIES[int(item.category)])
         return render(request, "auctions/listing.html", {
             "owner": item.user, "form": NewBid(), "item": item, 
             "user": user, "watched": WatchList.objects.filter(watching=item, watcher=user), 
             "isuser": True, "message": message, "price": bid, "winner": winner, 
-            "comments": Comments(), "user_comments": comments
+            "comments": Comments(), "user_comments": comments, "category": CATEGORIES[int(item.category)][1]
         })
 
 def watching(request):
@@ -182,17 +184,7 @@ def categories(request):
             dic[i.category] = [i.item]
         else:
             dic[i.category].append(i.item)
-    # cats = [i[0] for i in CATEGORIES]
-    # {% for i, j in dic.items %}
-    #     {{i}}
-    #     <br>
-    #     {% for h in j %}
-    #     {{h}}
-    #     <br>
-    #     {% endfor %}
-    #     <br>
-    #     <br>
-    # {% endfor %}
+    
     return render(request, "auctions/categories.html", {
         "dic": dic,  "categories": CATEGORIES
     })
@@ -200,9 +192,9 @@ def categories(request):
 def categories_contents(request, categoryName):
     user = request.user
     cat = CATEGORIES[categoryName]
-    print(cat)
-    items_in_category = AuctionListing.objects.filter(category=cat[1])
-    
+    print(cat[0])
+    items_in_category = AuctionListing.objects.filter(category=cat[0])
+    print("items", items_in_category)
     
     return render(request, "auctions/categories_contents.html", {
         "cat": cat, "items": items_in_category, "user": user

@@ -3,9 +3,9 @@
 {% block body %}
     <h2 id="newLisitngTitle">Create A New Listing</h2>
     
+    <!-- form to create a new lisitng -->
     <form class="newListing" action="{% url 'new_listing' %}" method="post">
         {% csrf_token %}
-        
         {% for element in form %}
             {{ element.label_tag }}
             <div class="element">
